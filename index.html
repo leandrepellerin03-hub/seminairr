@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEMIN'AIR — Séminaires d'entreprise en Savoie</title>
+<style>
+  :root{
+    --blue:#1f6fb2; --blue-dark:#155a94; --green:#3d9e6e; --sand:#fdf9f3;
+    --ink:#23303a; --muted:#5c6b76; --card:#ffffff; --radius:18px;
+    --shadow:0 10px 30px rgba(31,111,178,.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:"Segoe UI",system-ui,-apple-system,sans-serif;background:var(--sand);color:var(--ink);line-height:1.6;}
+  /* Header */
+  header{background:linear-gradient(120deg,#eaf4fc 0%,#f2fbf5 100%);padding:22px 6vw;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+  .logo{font-size:1.5rem;font-weight:800;color:var(--blue);letter-spacing:.5px;}
+  .logo span{color:var(--green);}
+  .nav a{margin-left:26px;text-decoration:none;color:var(--muted);font-weight:600;transition:color .2s;}
+  .nav a:hover{color:var(--blue);}
+  /* Hero */
+  .hero{position:relative;height:62vh;min-height:420px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.15),rgba(253,249,243,.92) 92%);}
+  .hero-text{position:relative;z-index:2;text-align:center;padding:0 5vw;transform:translateY(-8%);}
+  .hero-text h1{font-size:clamp(2rem,5vw,3.4rem);color:var(--ink);}
+  .hero-text h1 em{font-style:normal;color:var(--blue);}
+  .hero-text p{max-width:620px;margin:14px auto 0;color:var(--muted);font-size:1.1rem;}
+  .badge{display:inline-block;background:var(--green);color:#fff;border-radius:999px;padding:6px 18px;font-weight:700;font-size:.85rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;}
+  /* Intro */
+  .intro{max-width:900px;margin:0 auto;padding:56px 5vw 10px;text-align:center;}
+  .intro h2{font-size:1.9rem;margin-bottom:12px;}
+  .intro p{color:var(--muted);}
+  /* Tabs */
+  .tabs{max-width:1150px;margin:40px auto 0;padding:0 5vw;}
+  .tab-bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+  .tab-btn{border:none;background:#fff;color:var(--muted);font-weight:700;font-size:1rem;padding:14px 26px;border-radius:999px;cursor:pointer;box-shadow:var(--shadow);transition:all .25s;border:2px solid transparent;}
+  .tab-btn:hover{transform:translateY(-2px);}
+  .tab-btn.active{background:var(--blue);color:#fff;border-color:var(--blue-dark);}
+  .panel{display:none;margin-top:34px;animation:fade .45s ease;}
+  .panel.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  .panel-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;}
+  .panel-head .num{font-size:1rem;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:2px;}
+  .panel-head h2{font-size:2rem;}
+  .vision{display:inline-block;margin-top:10px;background:#eaf6ef;color:var(--green);font-weight:700;border-radius:10px;padding:6px 14px;font-size:.95rem;}
+  /* Cards grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-top:26px;}
+  .card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+  .card img{width:100%;height:230px;object-fit:cover;display:block;transition:transform .5s;}
+  .card:hover img{transform:scale(1.05);}
+  .card .body{padding:20px 22px;}
+  .card .body h3{font-size:1.15rem;margin-bottom:8px;color:var(--blue-dark);}
+  .card .body p{color:var(--muted);font-size:.97rem;}
+  /* Steps */
+  .steps{margin-top:30px;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 28px;}
+  .steps h3{color:var(--blue-dark);margin-bottom:14px;}
+  .steps ol{list-style:none;counter-reset:s;}
+  .steps li{counter-increment:s;position:relative;padding:10px 0 10px 48px;border-bottom:1px dashed #e4ebf1;}
+  .steps li:last-child{border-bottom:none;}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:8px;width:32px;height:32px;border-radius:50%;background:var(--green);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;}
+  /* Info bar */
+  .info-bar{margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+  .info{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dark) 100%);color:#fff;border-radius:var(--radius);padding:20px 22px;text-align:center;}
+  .info.alt{background:linear-gradient(135deg,var(--green) 0%,#2c7d55 100%);}
+  .info .label{font-size:.8rem;text-transform:uppercase;letter-spacing:1.5px;opacity:.85;}
+  .info .value{font-size:1.45rem;font-weight:800;margin-top:4px;}
+  .info .sub{font-size:.85rem;opacity:.85;}
+  /* CTA */
+  .cta{margin-top:26px;text-align:center;}
+  .cta a{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font-weight:700;padding:15px 42px;border-radius:999px;transition:background .2s,transform .2s;}
+  .cta a:hover{background:var(--blue-dark);transform:translateY(-2px);}
+  /* Footer */
+  footer{margin-top:70px;background:#eef4f9;text-align:center;padding:34px 5vw;color:var(--muted);font-size:.95rem;}
+  footer strong{color:var(--blue);}
+  @media(max-width:640px){
+    .nav a{margin-left:14px;font-size:.9rem;}
+    .hero{height:52vh;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">SEMIN<span>'</span>AIR</div>
+  <nav class="nav">
+    <a href="#seminaires">Nos séminaires</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <img src="https://kimi-web-img.kimi.ai/img/www.chambery.fr/bdb3eab9c6f3841a5fbe042a7b98778336a9519e.jpg" alt="Vue sur Chambéry et les montagnes de Savoie">
+  <div class="hero-text">
+    <span class="badge">Savoie · Alpes</span>
+    <h1>Des séminaires d'entreprise <em>qui respirent les montagnes</em></h1>
+    <p>SEMIN'AIR crée des expériences de cohésion, de récompense et de réunion au cœur de la Savoie : vélo, VTT électrique, parapente et péniche au fil de l'eau.</p>
+  </div>
+</section>
+
+<section class="intro">
+  <h2>Trois visions du séminaire</h2>
+  <p>Parce qu'un séminaire n'a jamais le même objectif, nous avons imaginé trois formats complémentaires. Choisissez celui qui répond à l'ambition de votre journée d'équipe.</p>
+</section>
+
+<section class="tabs" id="seminaires">
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab(0)">🚲 Cohésion · Vélo 2 jours</button>
+    <button class="tab-btn" onclick="showTab(1)">🏆 Récompense · VTT &amp; Parapente</button>
+    <button class="tab-btn" onclick="showTab(2)">💼 Réunion · Chanaz &amp; Péniche</button>
+  </div>
+
+  <!-- ============ ACTIVITÉ 1 ============ -->
+  <div class="panel active">
+    <div class="panel-head">
+      <span class="num">Séminaire 01</span>
+      <h2>La Pédale Solidaire</h2>
+    </div>
+    <span class="vision">Vision : Cohésion de groupe</span>
+    <p style="margin-top:12px;color:var(--muted);max-width:780px;">
+      Deux jours à vélo pour souder les équipes ! Un parcours <strong>100&nbsp;% local autour de Chambéry</strong>,
+      jalonné de points de rendez-vous et de défis en groupe, se termine par une nuit en logement confortable
+      (lits, cuisine, espace commun) pour prolonger les échanges.
+    </p>
+
+    <div class="grid">
+      <div class="card">
+        <img src="https://kimi-web-img.kimi.ai/img/bcyclet.com/4e088a5759310b423287134bbcb8d60e3e89cec1.jpg" alt="Groupe de cyclistes en séminaire entreprise">
+        <div class="body">
+          <h3>Rouler ensemble</h3>
+          <p>Des équipes mixtes pédalent sur des voies douces et des petites routes savoyardes, entre Bauges et vallées de Chambéry.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://kimi-web-img.kimi.ai/img/www.rumilly-tourisme.com/fd759c000b22c75b37cb580100e8fdadafd47f3c.jpg" alt="Place piétonne à Chambéry">
+        <div class="body">
+          <h3>Parcours 100&nbsp;% local</h3>
+          <p>Producteurs, artisans et cafés de Chambéry : chaque point de rendez-vous est une découverte du terroir savoyard.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://kimi-web-img.kimi.ai/img/www.carnets-nordiques.com/96c85c5cfb9794aa3c8c113a20db0e3e2df3920f.jpg" alt="Vélo face aux montagnes savoyardes">
+        <div class="body">
+          <h3>Défis en groupe</h3>
+          <p>Énigmes, balises et challenges coopératifs : on gagne ensemble ou on ne gagne pas !</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <h3>Déroulé de l'expérience</h3>
+      <ol>
+        <li><strong>Jour 1 — matin :</strong> accueil à Chambéry, briefing sécurité, distribution des vélos et départ par équipes.</li>
+        <li><strong>Jour 1 — journée :</strong> points de rendez-vous et défis collectifs le long d'un parcours 100&nbsp;% local (producteurs, villages, points de vue).</li>
+        <li><strong>Jour 1 — soir :</strong> arrivée au logement confortable, apéritif convivial et dîner préparé ensemble dans la cuisine commune.</li>
+        <li><strong>Jour 2 :</strong> grande épreuve finale en groupe et déjeuner de clôture avant le retour.</li>
+      </ol>
+    </div>
+
+    <div class="info-bar">
+      <div class="info"><div class="label">Groupe</div><div class="value">10 – 30 pers.</div><div class="sub">min. / max.</div></div>
+      <div class="info alt"><div class="label">Tarif</div><div class="value">189&nbsp;€ / pers.</div><div class="sub">2 jours · 1 nuit · tout inclus</div></div>
+      <div class="info"><div class="label">Lieu</div><div class="value" style="font-size:1.15rem;">Chambéry &amp; environs</div><div class="sub">Savoie · départ Chambéry</div></div>
+    </div>
+
+    <div class="cta"><a href="#contact">Demander ce séminaire</a></div>
+  </div>
+
+  <!-- ============ ACTIVITÉ 2 ============ -->
+  <div class="panel">
+    <div class="panel-head">
+      <span class="num">Séminaire 02</span>
+      <h2>Les Étoiles des Bauges</h2>
+    </div>
+    <span class="vision">Vision : Récompense des employés</span>
+    <p style="margin-top:12px;color:var(--muted);max-width:780px;">
+      Une journée d'exception pour valoriser vos équipes : <strong>course d'orientation en VTT électrique</strong>
+      au pied des Bauges, <strong>parapente au Mont Revard</strong> pour les plus courageux, et <strong>soirée fondu
+      ou raclette</strong> dans une ambiance chaleureuse.
+    </p>
+
+    <div class="grid">
+      <div class="card">
+        <img src="https://kimi-web-img.kimi.ai/img/woody.cloudly.space/981b2b005eebace8576bde909bdb668e745c31b1.webp" alt="Groupe de VTT électrique en montagne">
+        <div class="body">
+          <h3>Course d'orientation en VTT électrique</h3>
+          <p>Des balises à trouver, un itinéraire à tracer : l'effort devient jeu grâce à l'assistance électrique.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://kimi-web-img.kimi.ai/img/www.parapente-bourget.fr/9ce9201dbd0d5f2c851f4a4984675058028666ca.webp" alt="Parapente au-dessus du lac du Bourget">
+        <div class="body">
+          <h3>Parapente au Mont Revard</h3>
+          <p>Pour les plus courageux : un baptême en biplace face au lac du Bourget, souvenir garanti à vie.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://kimi-web-img.kimi.ai/img/files.meilleurduchef.com/2c31dbc9d5821ecd459998f5edb76c4a8ee05bde.jpg" alt="Fondue savoyarde">
+        <div class="body">
+          <h3>Soirée savoyarde</h3>
+          <p>Fondu ou raclette autour d'une grande table : le moment convivial qui clôt une belle journée de récompense.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <h3>Déroulé de l'expérience</h3>
+      <ol>
+        <li><strong>Après-midi :</strong> course d'orientation en VTT électrique par équipes, au départ du massif des Bauges.</li>
+        <li><strong>Fin d'après-midi :</strong> option parapente en biplace au Mont Revard pour les volontaires (encadrement professionnel certifié).</li>
+        <li><strong>Soir :</strong> repas savoyard de type fondu ou raclette, moment convivial et remise symbolique des « Étoiles » de la journée.</li>
+      </ol>
+    </div>
+
+    <div class="info-bar">
+      <div class="info"><div class="label">Groupe</div><div class="value">8 – 40 pers.</div><div class="sub">min. / max.</div></div>
+      <div class="info alt"><div class="label">Tarif</div><div class="value">145&nbsp;€ / pers.</div><div class="sub">+ 95&nbsp;€ l'option parapente</div></div>
+      <div class="info"><div class="label">Lieu</div><div class="value" style="font-size:1.15rem;">Massif des Bauges</div><div class="sub">Mont Revard · Savoie</div></div>
+    </div>
+
+    <div class="cta"><a href="#contact">Demander ce séminaire</a></div>
+  </div>
+
+  <!-- ============ ACTIVITÉ 3 ============ -->
+  <div class="panel">
+    <div class="panel-head">
+      <span class="num">Séminaire 03</span>
+      <h2>Cap sur Chanaz</h2>
+    </div>
+    <span class="vision">Vision : Séminaire avec volet réunion</span>
+    <p style="margin-top:12px;color:var(--muted);max-width:780px;">
+      La journée qui conjugue <strong>plaisir d'équipe</strong> et <strong>efficacité professionnelle</strong> : course
+      d'orientation à pied par groupes dans et autour de Chanaz, « la petite Venise savoyarde », puis apéro, réunion
+      et repas convivial à bord d'une <strong>péniche</strong> sur le canal de Savières.
+    </p>
+
+    <div class="grid">
+      <div class="card">
+        <img src="https://kimi-web-img.kimi.ai/img/sop-events.fr/54a3346113c6471c83fd75d3089f3021acadc260.jpg" alt="Équipe en train de lire une carte en course d'orientation">
+        <div class="body">
+          <h3>Course d'orientation à pied</h3>
+          <p>Par groupes, carte et boussole en main, explorez les ruelles de Chanaz et les berges du canal de Savières.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://kimi-web-img.kimi.ai/img/www.rumilly-tourisme.com/08450fb59f1e922a10750645cd234546b98e19d5.jpg" alt="Village de Chanaz au bord du canal">
+        <div class="body">
+          <h3>Chanaz, superbe village savoyard</h3>
+          <p>Pierres blondes, lavoirs, ateliers d'artisans : un décor pittoresque classé parmi les plus beaux sites de Savoie.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://kimi-web-img.kimi.ai/img/ims.easyvoyage.info/afb993f3f35a88c722feb79b202e63b5a659e528.jpg" alt="Péniche sur le canal de Savières">
+        <div class="body">
+          <h3>Péniche &amp; réunion</h3>
+          <p>Apéritif à bord, puis votre réunion d'entreprise face à l'eau, avant un repas convivial toujours sur la péniche.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <h3>Déroulé de l'expérience</h3>
+      <ol>
+        <li><strong>Matin / début d'après-midi :</strong> course d'orientation à pied par groupes autour de Chanaz et le long du canal de Savières.</li>
+        <li><strong>Retour :</strong> apéritif d'accueil à bord de la péniche amarrée au port de Chanaz.</li>
+        <li><strong>Volet réunion :</strong> votre entreprise expose ses messages dans le salon de la péniche (écran, sonorisation fournis).</li>
+        <li><strong>Soir :</strong> repas convivial à bord, navigation possible selon la saison, pour finir la journée sur l'eau.</li>
+      </ol>
+    </div>
+
+    <div class="info-bar">
+      <div class="info"><div class="label">Groupe</div><div class="value">10 – 60 pers.</div><div class="sub">min. / max.</div></div>
+      <div class="info alt"><div class="label">Tarif</div><div class="value">120&nbsp;€ / pers.</div><div class="sub">journée · apéro · réunion · repas</div></div>
+      <div class="info"><div class="label">Lieu</div><div class="value" style="font-size:1.15rem;">Chanaz</div><div class="sub">Canal de Savières · Savoie</div></div>
+    </div>
+
+    <div class="cta"><a href="#contact">Demander ce séminaire</a></div>
+  </div>
+</section>
+
+<footer id="contact">
+  <p><strong>SEMIN'AIR</strong> — Séminaires d'entreprise en Savoie</p>
+  <p>📍 Chambéry, Savoie &nbsp;·&nbsp; 📞 04 00 00 00 00 &nbsp;·&nbsp; ✉️ contact@seminair.fr</p>
+  <p style="margin-top:8px;font-size:.85rem;">Tarifs indicatifs hors transport — devis personnalisé sur demande.</p>
+</footer>
+
+<script>
+  function showTab(i){
+    document.querySelectorAll('.tab-btn').forEach((b,j)=>b.classList.toggle('active',j===i));
+    document.querySelectorAll('.panel').forEach((p,j)=>p.classList.toggle('active',j===i));
+  }
+</script>
+</body>
+</html>
